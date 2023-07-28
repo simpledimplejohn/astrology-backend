@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const expressLayouts = required('express-ejs-layouts')
+const expressLayouts = require('express-ejs-layouts')
 
 // this sets where the location of all our files are
 app.set('view engine', 'ejs')
@@ -9,3 +9,4 @@ app.set('layout', 'layout/layout')
 app.use(expressLayouts)
 app.use(express.static('public'))
 
+app.listen(process.env.PORT || 3000)
