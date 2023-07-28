@@ -1,5 +1,8 @@
 ### Basic setup of a back in 
 This is based on the youtube tutorial serries to start and will be built into something more
+https://www.youtube.com/watch?v=qj2oDkvc4dQ&list=PLZlA0Gpn_vH8jbFkBjOuFjhxANC63OmXM&index=5
+
+stopped at 11mins on course #1
 ## Setup 
 - npm init -y 
 - npm i express ejs 
