@@ -10,3 +10,10 @@ stopped at 11mins on course #1
 - npm i --save-dev nodemon  // this lets us refresh our server in real time
     - make a script in the package.json to run the server
     - update package.json to run the server, we will call the first one server.js
+- npm i --save node-fetch 
+
+## Next steps for the index.js file
+- Handle API key with .env
+- Create model for user and for the chart
+- Send response data to the database
+- error handling for bad response
