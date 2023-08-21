@@ -13,7 +13,16 @@ stopped at 11mins on course #1
 - npm i --save node-fetch 
 
 ## Next steps for the index.js file
-- Handle API key with .env
+* Handle API key with .env
 - Create model for user and for the chart
 - Send response data to the database
 - error handling for bad response
+
+
+## Documentation
+- Fetch API `https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#uploading_json_data`
+- Express Server `https://expressjs.com/en/4x/api.html`
+- Mongoose `https://mongoosejs.com/docs/api/schematype.html`
+- Javascript `https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/Date`
+
+

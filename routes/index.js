@@ -1,11 +1,10 @@
 const express = require('express')
 const router = express.Router()
 const fetch = require('node-fetch');
+const UserModel = require('../models/user')
 
 // const response = await fetch(myUrl, otherArgs)
 // const data = await response.json()
-
-
 
 router.get('/', async (req, res) => {
   
@@ -24,6 +23,7 @@ router.get('/', async (req, res) => {
           "ayanamsha": "lahiri"
         }
       }
+     
     const response = await fetch(process.env.MY_URL, {
         method: "POST",
         headers: {
@@ -35,6 +35,20 @@ router.get('/', async (req, res) => {
     const result = await response.json()
 
     console.log(result)
+    // pass data into the model
+    const formatDate = new Date(userData.year, userData.month - 1, userData.date, userData.hours)
+    console.log(formatDate)
+
+    const dbobject = await UserModel.create({
+        fname: 'fred',
+        lname: 'frederson',
+        dob: formatDate,
+        lat: userData.latitude,
+        log: userData.longitude,
+        timezone: userData.timezone
+
+    })
+    console.log(dbobject)
     // res.send('Hello World', result)
     res.json(result) // will send back to the client
 
