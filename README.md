@@ -7,10 +7,13 @@
 - root folder `\BACK_END`
 - mongodb 
     - brew services start mongodb-community
-    
+- launch 
+    npm run start
+
 
 
 ## Setup 
+Node stuff
 - npm init -y 
 - npm i express ejs 
 - npm i express-ejs-layouts
@@ -18,6 +21,30 @@
     - make a script in the package.json to run the server
     - update package.json to run the server, we will call the first one server.js
 - npm i --save node-fetch 
+Mongodb
+- `brew install mongosh` (shell for viewing database)
+- mongosh // starts the shell
+- show dbs
+- use test // use the database
+- exit // gets you out
+- use appdb //creates/opens appdb database
+- db. creates tables
+    - db.users.insertOne({ fname: "bohn", lname: "jalock"})
+    - returns 
+{
+  acknowledged: true,
+  insertedId: ObjectId("64f4cf9c9412334708976a42")
+}
+- db.users.find()
+- _id created automatically
+db.users.insert({ fname: "zohn", lname: "zalock", age: 44, address: {street: "thisone", houseNumber: 6700}, hobbies:["sitting", "running"]})
+- db.users.insertMany([{},{}])
+
+db.users.insertMany([{ fname: "zohn", lname: "zalock", age: 44, address: {street: "thisone", houseNumber: 6700}, hobbies:["sitting", "running"]},{ fname: "fohn", lname: "zzalock", age: 454, address: {street: "thisone", houseNumber: 6700}, hobbies:["sitting", "running"]},{ fname: "mohn", lname: "zzzalock", age: 424, address: {street: "thisone", houseNumber: 6700}, hobbies:["sitting", "running"]},{ fname: "dohn", lname: "zzzzzalock", age: 144, address: {street: "thisone", houseNumber: 6700}, hobbies:["sitting", "running"]},{ fname: "xohn", lname: "zzzzzalock", age: 444, address: {street: "thisone", houseNumber: 6700}, hobbies:["sitting", "running"]},{ fname: "yohn", lname: "zzzalock", age: 404, address: {street: "thisone", houseNumber: 6700}, hobbies:["sitting", "running"]},{ fname: "qohn", lname: "zzalock", age: 44, address: {street: "thisone", houseNumber: 6700}, hobbies:["sitting", "running"]}])
+
+- db.users.find().limit(2)
+- db.users.find().sort({ name: -1 }).limit(2)
+- db.users.find({ name: "zohn"})
 
 ## Next steps for the index.js file
 * Handle API key with .env

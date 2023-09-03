@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 
 
 // connecte to MongoDB
-mongoose.connect('mongodb://localhost/', {
+mongoose.connect('mongodb://localhost/users', {
     userNewUrlParser: true,
     userUnifiedTopology: true,
 });
