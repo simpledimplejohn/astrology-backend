@@ -46,6 +46,11 @@ db.users.insertMany([{ fname: "zohn", lname: "zalock", age: 44, address: {street
 - db.users.find().sort({ name: -1 }).limit(2)
 - db.users.find({ name: "zohn"})
 
+
+Using the kitten database
+go into the test db
+test> db.kettens.find()
+
 ## Next steps for the index.js file
 * Handle API key with .env
 - Create model for user and for the chart

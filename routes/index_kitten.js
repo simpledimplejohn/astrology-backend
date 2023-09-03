@@ -1,27 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
-
-// Define the schema
-const kittySchema = new mongoose.Schema({
-  name: String
-});
-
-// Define a method to add to the schema
-kittySchema.methods.speak = function speak() {
-  const greeting = this.name
-    ? 'Meow name is ' + this.name
-    : "I don't have a name";
-  console.log(greeting);
-};
-
-// Create a model
-const Kitten = mongoose.model('Kitten', kittySchema);
+const Kitten = require('../models/kitten'); // Updated import path
 
 // Handle routes
 router.get('/', async (req, res) => {
   // Create a kitten document
-  const fluffy = new Kitten({ name: 'fluffy' });
+  const fluffy = new Kitten({ name: 'johnny' });
 
   // Call the speak method
   fluffy.speak();
@@ -31,13 +15,25 @@ router.get('/', async (req, res) => {
 
   // Query all kittens in the database
   const kittens = await Kitten.find();
-  console.log(kittens);
+  console.log("ALL THE KITTENS!",kittens);
 
   // Query kittens by name
-  const specificKittens = await Kitten.find({ name: /^fluff/ });
-  console.log(specificKittens);
+  const specificKittens = await Kitten.find({ name: /^zuffy/ });
+  console.log("just one kitten named: ",specificKittens);
 
-  res.json({ message: 'Kitten actions performed' });
+  res.json(specificKittens);
+});
+
+// New route to get all kittens
+router.get('/kittens', async (req, res) => {
+    try {
+      // Query all kittens in the database
+      const kittens = await Kitten.find();
+  
+      res.json(kittens);
+    } catch (error) {
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
 });
 
 module.exports = router;

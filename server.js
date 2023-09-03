@@ -15,13 +15,7 @@ app.use(express.static('public'))
 
 app.use('/', indexRouter) // tells the app to use the above router tied to the file
 
-// close mongoose
-process.on('SIGINT', () => {
-    mongoose.connection.close(() => {
-        console.log('Mongoose connection closed through app termination');
-        process.exit(0);
-    });
-});
+
 
 
 app.listen(process.env.PORT || 3000)
