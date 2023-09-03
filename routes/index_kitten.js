@@ -1,6 +1,12 @@
+// index_kitten.js
+
 const express = require('express');
 const router = express.Router();
 const Kitten = require('../models/kitten'); // Updated import path
+const mongoose = require('mongoose')
+
+
+
 
 // Handle routes
 router.get('/', async (req, res) => {
@@ -35,5 +41,20 @@ router.get('/kittens', async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
+
+// new rout add kitten
+router.post('/api/addKitten', async (req, res) => {
+    try {
+        const { name } = req.body;
+        const kitten = new Kitten({ name });
+        await kitten.save();
+        console.log(kitten.name)
+        res.json({ kitten: kitten.name})
+        // res.status(201).json({ message: 'Kitten added2'});
+    } catch (error) {
+        res.status(500).json({ error: 'Internal Server Error '})
+    }
+})
 
 module.exports = router;

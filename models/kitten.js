@@ -1,3 +1,5 @@
+// kitten.js
+
 const mongoose = require('mongoose');
 
 // Define the schema

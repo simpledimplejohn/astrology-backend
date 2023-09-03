@@ -1,10 +1,12 @@
+// server_kitten.js
+
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 const port = process.env.PORT || 3000;
 
 // Connect to MongoDB
-mongoose.connect('mongodb://127.0.0.1:27017/test', {
+mongoose.connect('mongodb://127.0.0.1:27017/kitten', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
