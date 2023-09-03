@@ -2,6 +2,22 @@ const express = require('express')
 const router = express.Router()
 const fetch = require('node-fetch');
 const UserModel = require('../models/user')
+const mongoose = require('mongoose');
+
+
+// connecte to MongoDB
+mongoose.connect('mongodb://localhost/', {
+    userNewUrlParser: true,
+    userUnifiedTopology: true,
+});
+
+const db = mongoose.connection;
+
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+db.once('open', () => {
+    console.log('Connected to MongoDB')
+});
+
 
 // const response = await fetch(myUrl, otherArgs)
 // const data = await response.json()
