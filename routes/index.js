@@ -97,7 +97,7 @@ router.get('/users', async (req, res) => {
 
 
 // create user from front end form 
-router.post('/userchart', async (req, res) => {
+router.post('/addUserChart', async (req, res) => {
     console.log("post")
     try {
         console.log("try")
@@ -170,8 +170,17 @@ router.post('/addUser', async (req, res) => {
   
       res.status(201).json({ message: 'User added successfully' });
     } catch (error) {
-      res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).json({error: error.message})
     }
   });
+
+router.get('/getChart', async (req, res) => {
+    try {
+        const userData = req.body;
+        res.json({ userData })
+    }catch (error) {
+        res.status(500).json({error: error.message})
+    }
+})
 
 module.exports = router //alows this to be exported to the server file

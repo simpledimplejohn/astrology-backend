@@ -8,7 +8,7 @@
 - mongodb 
     - brew services start mongodb-community
 - launch 
-    npm run start
+    `npm run devStart`
 
 
 
