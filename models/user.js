@@ -1,33 +1,37 @@
 const mongoose = require('mongoose')
 
-const UserSchema = new mongoose.Schema({
-    fname: {
-        type: String,
-        required: true
-    }, 
-    lname: {
-        type: String,
-        required: true
-    }, 
-    dob: {
-        type: Date,
-        required: true
-    }, 
-    lat: {
-        type: Number,
-        require: true
-    },
-    log: {
-        type: Number,
-        require: true
-    },
-    timezone: {
-        type: Number,
-        require: true
-    }
+// planet goes in chart
+// chart goes in user
 
+
+// plantet schema
+const Planet = new mongoose.Schema({
+    current_sign: Number,
+    fullDegree: mongoose.Types.Decimal128,
+    normDegree: mongoose.Types.Decimal128,
+    isRetro: Boolean, 
 });
 
-const UserModel = new mongoose.model('User', UserSchema)
+const Chart = new mongoose.Schema({
+    planets: {
+        type: Map,
+        of: Planet,
+    }
+})
 
-module.exports = UserModel
+
+const UserSchema = new mongoose.Schema({
+    fname: String, 
+    lname: String, 
+    dob: Date,
+    lat: Number,
+    lon: Number,
+    timezone: Number,
+    chart: Chart,
+});
+
+const UserModel = mongoose.model('User', UserSchema)
+const ChartModel = mongoose.model("Chart", Chart)
+
+
+module.exports = {UserModel, ChartModel}; 

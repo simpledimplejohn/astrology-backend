@@ -1,7 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const fetch = require('node-fetch');
-const UserModel = require('../models/user')
+const {UserModel, ChartModel} = require('../models/user')
+
 
 
 
@@ -41,13 +42,16 @@ router.get('/', async (req, res) => {
     const formatDate = new Date(userData.year, userData.month - 1, userData.date, userData.hours)
     console.log(formatDate)
 
-    const dbobject = await UserModel.create({
+    const dbobject = await UserModel.create({ // this makes our user object in our db
         fname: 'fred',
         lname: 'frederson',
         dob: formatDate,
         lat: userData.latitude,
         log: userData.longitude,
-        timezone: userData.timezone
+        timezone: userData.timezone,
+        chart: {
+            planets: {"Ascendant": result.output[1].Ascendant},
+        }
 
     })
     console.log(dbobject)
@@ -56,6 +60,51 @@ router.get('/', async (req, res) => {
 
     // const userData = req.body
    
+})
+
+// const myArrow1 = () => {
+//     // do stuff
+//     return 'whatever'
+// }
+
+// const myArrow2 = () => 'whatever'
+
+// const myArrow3 = (myObj) => ({
+//     prop1: myObj.value,
+//     prop2: 'whatever'
+// })
+
+// show all the users in the database
+router.get('/users', async (req, res) => {
+    try {
+        const user = await UserModel.find().populate({ path: "chart" }).exec();
+
+        const chart = await ChartModel.findById("64f626120bade3355b1bba7b")
+        console.log(user)
+        console.log(chart)
+
+        // user.forEach(  (item) => {
+
+        //     console.log("debug",item.chart.planets.get("Ascendant"));
+        // } )
+        res.json(user);
+
+    } catch (error) {
+
+        res.status(500).json({error: error.message});
+    }
+});
+
+
+// create user from front end form 
+router.post('new', async (req, res) => {
+    try {
+        const user = await UserModel.create({
+            fname:
+        })
+    }catch (error) {
+        res.status(999).json({error: error.message})
+    }
 })
 
 module.exports = router //alows this to be exported to the server file

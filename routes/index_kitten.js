@@ -46,10 +46,12 @@ router.get('/kittens', async (req, res) => {
 // new rout add kitten
 router.post('/api/addKitten', async (req, res) => {
     try {
+        console.log("body",req.body)
         const { name } = req.body;
         const kitten = new Kitten({ name });
         await kitten.save();
-        console.log(kitten.name)
+        // console.log(kitten.name)
+        
         res.json({ kitten: kitten.name})
         // res.status(201).json({ message: 'Kitten added2'});
     } catch (error) {
