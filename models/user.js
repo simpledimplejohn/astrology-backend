@@ -25,7 +25,7 @@ const UserSchema = new mongoose.Schema({
     lname: String, 
     dob: Date,
     lat: Number,
-    lon: Number,
+    log: Number,
     timezone: Number,
     chart: Chart,
 });

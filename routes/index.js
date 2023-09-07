@@ -97,9 +97,10 @@ router.get('/users', async (req, res) => {
 
 
 // create user from front end form 
-router.post('new', async (req, res) => {
+router.post('/userchart', async (req, res) => {
+    console.log("post")
     try {
-        
+        console.log("try")
         const userData = req.body;
 
         const response = await fetch(process.env.MY_URL, {
@@ -122,15 +123,55 @@ router.post('new', async (req, res) => {
             lname: userData.lname,
             dob: formatDate,
             lat: userData.lat,
-            lon: userData.lon,
+            log: userData.log,
             timezone: userData.timezone,
             chart: {
                 planets: {"Ascendant": result.output[1].Ascendant}
             }
         }); 
+
+        await dbobject.save();
+        res.json({ uid: userData._id})
+
     }catch (error) {
         res.status(500).json({error: error.message})
     }
 })
+
+
+router.post('/addUser', async (req, res) => {
+    try {
+      // Extract user data from the request body
+      const {
+        fname,
+        lname,
+        dob,
+        lat,
+        lon,
+        timezone,
+        chart: { planets },
+      } = req.body;
+  
+      // Create a new user object
+      const newUser = new UserModel({
+        fname,
+        lname,
+        dob: new Date(dob), // Parse the date string into a Date object
+        lat,
+        log: lon, // Correct the variable name to match your schema
+        timezone,
+        chart: {
+          planets,
+        },
+      });
+  
+      // Save the user object to the database
+      await newUser.save();
+  
+      res.status(201).json({ message: 'User added successfully' });
+    } catch (error) {
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
 
 module.exports = router //alows this to be exported to the server file
