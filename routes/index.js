@@ -99,11 +99,37 @@ router.get('/users', async (req, res) => {
 // create user from front end form 
 router.post('new', async (req, res) => {
     try {
-        const user = await UserModel.create({
-            fname:
-        })
+        
+        const userData = req.body;
+
+        const response = await fetch(process.env.MY_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "x-api-key": process.env.API_KEY,
+            },
+            body: JSON.stringify(userData)
+        });
+
+        const result = await response.json() // passes the response into the result
+
+        // format the date
+        const formatDate = new Date(userData.dob)
+
+        // This uses mongoose to add the object to the database
+        const dbobject = await UserModel.create({  // this makes a model from the schema
+            fname: userData.fname,
+            lname: userData.lname,
+            dob: formatDate,
+            lat: userData.lat,
+            lon: userData.lon,
+            timezone: userData.timezone,
+            chart: {
+                planets: {"Ascendant": result.output[1].Ascendant}
+            }
+        }); 
     }catch (error) {
-        res.status(999).json({error: error.message})
+        res.status(500).json({error: error.message})
     }
 })
 
