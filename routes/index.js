@@ -98,7 +98,7 @@ router.get('/users', async (req, res) => {
 
 // create user from front end form 
 router.post('/addUserChart', async (req, res) => {
-    console.log("addUserChart")
+    console.log("addUserChart1")
     try {
         console.log("try")
         const userData = req.body;
@@ -131,8 +131,10 @@ router.post('/addUserChart', async (req, res) => {
         const result = await response.json() // passes the response into the result
         
         // format the date
-        console.log("result",result)
-        console.log("result.dob",result.dob)
+        console.log("result1",result)
+        console.log("result.input.year1",result.input.year)
+
+        console.log("fix date here, this is where the break is")
         const formatDate = new Date(userData.dob)
 
         // This uses mongoose to add the object to the database
@@ -193,21 +195,40 @@ router.post('/addUser', async (req, res) => {
   });
 
 
-  // gets the chart if the user data is sent in the correct format
-router.get('/getChart', async (req, res) => {
+  // sends a chart the chart if the user data is sent in the correct format
+router.post('/getChart', async (req, res) => {
     try {
+        console.log("/getChart POST");
+        
         const userData = req.body;
+        console.log("user",userData)
+        const userSend = {  // this modifies the user data to send correctly to the api
+            "year": userData.year,
+            "month": userData.month,
+            "date": userData.date,
+            "hours": userData.birthTime,
+            "minutes": 0,
+            "seconds": 0,
+            "latitude": userData.latitude,
+            "longitude": userData.longitude,
+            "timezone": userData.timezone,
+            "settings": {
+              "observation_point": "topocentric",
+              "ayanamsha": "lahiri"
+            }
+        }
+        console.log("userSend ", userSend)
         const response = await fetch(process.env.MY_URL, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "x-api-key": process.env.API_KEY
             },
-            body: JSON.stringify(userData)
+            body: JSON.stringify(userSend)
         });
         const result = await response.json()
     
-        console.log(result)
+        console.log("returned chart",result)
         res.json({ result })
     }catch (error) {
         res.status(500).json({error: error.message})
