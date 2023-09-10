@@ -70,7 +70,7 @@ router.post('/addUserChart', async (req, res) => {
         });
         console.log("FIXTHIS!!!!! userModel dbobject created here: ",dbobject)
         await dbobject.save();  // sends to the database
-        res.json({ user: dbobject, chart: result.output[1] });  // returns the database object
+        res.json({ user: dbobject, chart: result });  // returns the database object
         console.log("It atually worked!!!")  // DONE
 
 
@@ -183,7 +183,8 @@ router.get('/allUsers', async (req, res) => {
 
 
 // this works and adds a user to the database only
-router.post('/addUser', async (req, res) => {
+// adds using the formated database user
+router.post('/addUserDB', async (req, res) => {
     try {
         // Extract user data from the request body
         const {
@@ -217,6 +218,47 @@ router.post('/addUser', async (req, res) => {
         res.status(500).json({ error: error.message })
     }
 });
+// test adding form to userdatabase without hitting the chart
+/*
+router.post('/addUserOnly', async (req, res) => {
+    try {
+        // Extract user data from the request body
+        const userForm {
+            firstName,
+            lastName,
+            birthdate,
+            birthTime,
+            latitude,
+            longitude,
+            timezone,
+            year,
+            month,
+            date,
+            chart: { planets },
+        } = req.body;
+
+        // Create a new user object
+        const newUser = new UserModel({
+            fname: userForm.firstName,
+            lname: userForm.lastName,
+            dob: userForm.year,  // new Date(dob), // Parse the date string into a Date object
+            lat: userForm.latitude,
+            log: userForm.longitude, // Correct the variable name to match your schema
+            timezone: userForm.timezone,
+            chart: {
+                planets,
+            },
+        });
+
+        // Save the user object to the database
+        await newUser.save();
+
+        res.status(201).json({ newUser });
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+});
+*/
 
 
 // sends a chart the chart if the user data is sent in the correct format

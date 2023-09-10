@@ -20,6 +20,9 @@ db.once('open', () => {
 // this sets where the location of all our files are
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*')
+});
 app.set('view engine', 'ejs')
 app.set('views', __dirname + '/views') 
 app.set('layout', 'layout/layout')
