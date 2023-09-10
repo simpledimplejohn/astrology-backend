@@ -1,7 +1,12 @@
-# Back End
+# Astrology Interface API Back End Server
+This API takes user data from the front end website.  It can get a users chart and add them to a data base.
+
+## Using
 - Node.js
 - Express
 - Mongodb
+- mongoose 
+- moment-timezone
 
 ## Launch
 - root folder `\BACK_END`
@@ -9,6 +14,43 @@
     - brew services start mongodb-community
 - launch 
     `npm run devStart`
+
+## Next Steps
+- getUserChart 
+    this endpoing takes the user, gets the chart, and adds to database 
+    NEEDS:
+    - Convert user data to properly format for the Astorlogy Call
+    - Front End sends over data formated like this:
+        {
+        "fname": "Zason",
+        "lname": "Zock",
+        "dob": "1/1/1876",  (DATE OBJECT IN UTC)
+        "lat": 44.4,
+        "log": -44.4,
+        "timezone": 4,
+        "chart": {
+            "planets": {
+            
+            }
+        }
+        }
+    - API needs them formated like this:
+        {
+        "year": 1978,
+        "month": 12,
+        "date": 11,
+        "hours": 20,
+        "minutes": 0,
+        "seconds": 0,
+        "latitude": 17.38333,
+        "longitude": 78.4666,
+        "timezone": -5,
+        "settings": {
+            "observation_point": "topocentric",
+            "ayanamsha": "lahiri"
+        }
+        }
+
 
 
 
@@ -51,17 +93,12 @@ Using the kitten database
 go into the test db
 test> db.kettens.find()
 
-## Next steps for the index.js file
-* Handle API key with .env
-- Create model for user and for the chart
-- Send response data to the database
-- error handling for bad response
-
 
 ## Documentation
 - Fetch API `https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#uploading_json_data`
 - Express Server `https://expressjs.com/en/4x/api.html`
 - Mongoose `https://mongoosejs.com/docs/api/schematype.html`
 - Javascript `https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/Date`
+
 
 

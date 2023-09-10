@@ -9,7 +9,7 @@ const {UserModel, ChartModel} = require('../models/user')
 // const response = await fetch(myUrl, otherArgs)
 // const data = await response.json()
 
-router.get('/', async (req, res) => {
+router.get('/test', async (req, res) => {
   
     const userData = {
         "year": 1978,
@@ -98,23 +98,41 @@ router.get('/users', async (req, res) => {
 
 // create user from front end form 
 router.post('/addUserChart', async (req, res) => {
-    console.log("post")
+    console.log("addUserChart")
     try {
         console.log("try")
         const userData = req.body;
-
+        const userSend =
+        {
+            "year": userData.year,
+            "month": userData.month,
+            "date": userData.date,
+            "hours": userData.birthTime,
+            "minutes": 0,
+            "seconds": 0,
+            "latitude": userData.latitude,
+            "longitude": userData.longitude,
+            "timezone": userData.timezone,
+            "settings": {
+              "observation_point": "topocentric",
+              "ayanamsha": "lahiri"
+            }
+        }
+        console.log("userData before POST",userSend)
         const response = await fetch(process.env.MY_URL, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "x-api-key": process.env.API_KEY,
             },
-            body: JSON.stringify(userData)
+            body: JSON.stringify(userSend)
         });
 
         const result = await response.json() // passes the response into the result
-
+        
         // format the date
+        console.log("result",result)
+        console.log("result.dob",result.dob)
         const formatDate = new Date(userData.dob)
 
         // This uses mongoose to add the object to the database
@@ -126,19 +144,19 @@ router.post('/addUserChart', async (req, res) => {
             log: userData.log,
             timezone: userData.timezone,
             chart: {
-                planets: {"Ascendant": result.output[1].Ascendant}
+                
             }
         }); 
 
         await dbobject.save();
-        res.json({ uid: userData._id})
+        res.json({ result })
 
     }catch (error) {
         res.status(500).json({error: error.message})
     }
-})
+});
 
-
+// this works and adds a user to the database only
 router.post('/addUser', async (req, res) => {
     try {
       // Extract user data from the request body
@@ -174,13 +192,27 @@ router.post('/addUser', async (req, res) => {
     }
   });
 
+
+  // gets the chart if the user data is sent in the correct format
 router.get('/getChart', async (req, res) => {
     try {
         const userData = req.body;
-        res.json({ userData })
+        const response = await fetch(process.env.MY_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "x-api-key": process.env.API_KEY
+            },
+            body: JSON.stringify(userData)
+        });
+        const result = await response.json()
+    
+        console.log(result)
+        res.json({ result })
     }catch (error) {
         res.status(500).json({error: error.message})
     }
+    
 })
 
 module.exports = router //alows this to be exported to the server file
