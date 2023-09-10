@@ -3,7 +3,81 @@ const router = express.Router()
 const fetch = require('node-fetch');
 const { UserModel, ChartModel } = require('../models/user')
 
+// create user and make chart from front end form 
+router.post('/addUserChart', async (req, res) => {
+    console.log("addUserChart1")
+    try {
+        console.log("try")
+        const userData = req.body;
+        const userSend =
+        {
+            "year": userData.year,
+            "month": userData.month,
+            "date": userData.date,
+            "hours": userData.birthTime,
+            "minutes": 0,
+            "seconds": 0,
+            "latitude": userData.latitude,
+            "longitude": userData.longitude,
+            "timezone": userData.timezone,
+            "settings": {
+                "observation_point": "topocentric",
+                "ayanamsha": "lahiri"
+            }
+        }
+        console.log("userData before POST", userSend)
+/////////////////////////////// FETCH DONE HERE //////////////////////////
+        const response = await fetch(process.env.MY_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "x-api-key": process.env.API_KEY,
+            },
+            body: JSON.stringify(userSend)
+        });
 
+        const result = await response.json() // passes the response into the result
+
+/////////////////////////////// JUST DATE FORMATING HERE //////////////////////////
+        // console.log("result1", result)
+
+
+        console.log("FROM THIS!!! userData", userData)
+
+        // Create a date object using the provided year, month, date, and time
+        const formatDate = new Date(
+            userData.year,
+            userData.month - 1, // Months are 0-based in JavaScript (0 = January, 1 = February, etc.)
+            userData.date,
+            userData.birthTime,
+            0, // Minutes (assuming it's 0, you can change it if needed)
+            0, // Seconds (assuming it's 0, you can change it if needed)
+            0 // Milliseconds (assuming it's 0, you can change it if needed)
+        );
+        console.log(formatDate)    
+/////////////////////////////// ADDING TO THE DATABASE //////////////////////////        
+        // This uses mongoose to add the object to the database
+        const dbobject = await UserModel.create({  // this makes a model from the schema
+            fname: userData.firstName,
+            lname: userData.lastName,
+            dob: formatDate,
+            lat: userData.latitude,
+            log: userData.longitude,
+            timezone: userData.timezone,
+            chart: {
+                planets: result.output[1].planets // drills into the results and returns the planets object and puts it in the planets field in the charts object
+            }
+        });
+        console.log("FIXTHIS!!!!! userModel dbobject created here: ",dbobject)
+        await dbobject.save();  // sends to the database
+        res.json({ user: dbobject, chart: result.output[1] });  // returns the database object
+        console.log("It atually worked!!!")  // DONE
+
+
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+});
 
 
 // TESTING WITH A PRE-BUILT USER gets a chart, adds to databse sucessful
@@ -106,78 +180,7 @@ router.get('/allUsers', async (req, res) => {
     }
 })
 
-// create user and make chart from front end form 
-router.post('/addUserChart', async (req, res) => {
-    console.log("addUserChart1")
-    try {
-        console.log("try")
-        const userData = req.body;
-        const userSend =
-        {
-            "year": userData.year,
-            "month": userData.month,
-            "date": userData.date,
-            "hours": userData.birthTime,
-            "minutes": 0,
-            "seconds": 0,
-            "latitude": userData.latitude,
-            "longitude": userData.longitude,
-            "timezone": userData.timezone,
-            "settings": {
-                "observation_point": "topocentric",
-                "ayanamsha": "lahiri"
-            }
-        }
-        console.log("userData before POST", userSend)
-        const response = await fetch(process.env.MY_URL, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "x-api-key": process.env.API_KEY,
-            },
-            body: JSON.stringify(userSend)
-        });
 
-        const result = await response.json() // passes the response into the result
-
-        // format the date
-        console.log("result1", result)
-        console.log("result.input.year1", result.input.year)
-
-        console.log("fix date here, this is where the break is")
-        console.log("userData", userData)
-
-        // Create a date object using the provided year, month, date, and time
-        const formatDate = new Date(
-            userData.year,
-            userData.month - 1, // Months are 0-based in JavaScript (0 = January, 1 = February, etc.)
-            userData.date,
-            userData.birthTime,
-            0, // Minutes (assuming it's 0, you can change it if needed)
-            0, // Seconds (assuming it's 0, you can change it if needed)
-            0 // Milliseconds (assuming it's 0, you can change it if needed)
-        );
-        console.log(formatDate)    
-        // This uses mongoose to add the object to the database
-        const dbobject = await UserModel.create({  // this makes a model from the schema
-            fname: userData.fname,
-            lname: userData.lname,
-            dob: formatDate,
-            lat: userData.lat,
-            log: userData.log,
-            timezone: userData.timezone,
-            chart: {
-            }
-        });
-
-        await dbobject.save();
-        res.json({ dbobject })
-        console.log("It atually worked!!!")
-
-    } catch (error) {
-        res.status(500).json({ error: error.message })
-    }
-});
 
 // this works and adds a user to the database only
 router.post('/addUser', async (req, res) => {
@@ -209,7 +212,7 @@ router.post('/addUser', async (req, res) => {
         // Save the user object to the database
         await newUser.save();
 
-        res.status(201).json({ message: 'User added successfully' });
+        res.status(201).json({ newUser });
     } catch (error) {
         res.status(500).json({ error: error.message })
     }
@@ -218,9 +221,9 @@ router.post('/addUser', async (req, res) => {
 
 // sends a chart the chart if the user data is sent in the correct format
 // needs date updated
-router.post('/addChart', async (req, res) => {
+router.post('/chart', async (req, res) => {
     try {
-        console.log("/addChart POST");
+        console.log("/chart POST");
 
         const userData = req.body;
         console.log("user", userData)
