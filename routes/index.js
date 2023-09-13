@@ -5,10 +5,10 @@ const { UserModel, ChartModel } = require('../models/user')
 
 // create user and make chart from front end form 
 router.post('/addUserChart', async (req, res) => {
-    console.log("addUserChart1")
+    console.log("addUserChart, this is the start ")
 
     try {
-        console.log("try")
+        
         const userData = req.body;
         console.log("userData,", userData)
         // const hour = userData.
@@ -17,7 +17,7 @@ router.post('/addUserChart', async (req, res) => {
             "year": userData.year,
             "month": userData.month,
             "date": userData.date,
-            "hours": userData.hour,
+            "hours": userData.birthTime,
             "minutes": 0,
             "seconds": 0,
             "latitude": userData.latitude,
@@ -28,7 +28,7 @@ router.post('/addUserChart', async (req, res) => {
                 "ayanamsha": "lahiri"
             }
         }
-        console.log("userData before POST", userSend)
+        console.log("userSend", userSend)
 /////////////////////////////// FETCH DONE HERE //////////////////////////
         const response = await fetch(process.env.MY_URL, {
             method: "POST",
@@ -40,26 +40,29 @@ router.post('/addUserChart', async (req, res) => {
         });
 
         const result = await response.json() // passes the response into the result
-        console.log("result", result)
-/////////////////////////////// JUST DATE FORMATING HERE //////////////////////////
-        // console.log("result1", result)
+        console.log("result", result)  // got to here
+        console.log("here??")
 
 
-        console.log("FROM THIS!!! userData", userData)
+
+        console.log("FROM THIS!!! userData", userData)  // made it to here
+
+        const dateString = "1995-12-17T03:24:00"
+        const dateString2 = `${userData.year}-${userData.month}-${userData.date}T${userData.birthTime}:00:00`
+        console.log("datestring2",dateString2)
         // const [hour] = userData.birthTime.split(":").map(Number) // this is the number object 
         
-
         // Create a date object using the provided year, month, date, and time
         const formatDate = new Date(
-            userData.year,
-            userData.month - 1, // Months are 0-based in JavaScript (0 = January, 1 = February, etc.)
-            userData.date,
-            userData.hours,
-            0, // Minutes (assuming it's 0, you can change it if needed)
-            0, // Seconds (assuming it's 0, you can change it if needed)
-            0 // Milliseconds (assuming it's 0, you can change it if needed)
+            // userData.year,
+            // userData.month - 1, // Months are 0-based in JavaScript (0 = January, 1 = February, etc.)
+            // userData.date,
+            dateString2,
+            // 0, // Minutes (assuming it's 0, you can change it if needed)
+            // 0, // Seconds (assuming it's 0, you can change it if needed)
+            // 0 // Milliseconds (assuming it's 0, you can change it if needed)
         );
-        console.log(formatDate)    
+        console.log("formated date",formatDate)    
 /////////////////////////////// ADDING TO THE DATABASE //////////////////////////   
 ///////////////////////////////////////////////////////////////////////////////     
         // This uses mongoose to add the object to the database
