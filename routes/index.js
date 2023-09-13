@@ -6,15 +6,18 @@ const { UserModel, ChartModel } = require('../models/user')
 // create user and make chart from front end form 
 router.post('/addUserChart', async (req, res) => {
     console.log("addUserChart1")
+
     try {
         console.log("try")
         const userData = req.body;
+        console.log("userData,", userData)
+        // const hour = userData.
         const userSend =
         {
             "year": userData.year,
             "month": userData.month,
             "date": userData.date,
-            "hours": userData.birthTime,
+            "hours": userData.hour,
             "minutes": 0,
             "seconds": 0,
             "latitude": userData.latitude,
@@ -37,25 +40,28 @@ router.post('/addUserChart', async (req, res) => {
         });
 
         const result = await response.json() // passes the response into the result
-
+        console.log("result", result)
 /////////////////////////////// JUST DATE FORMATING HERE //////////////////////////
         // console.log("result1", result)
 
 
         console.log("FROM THIS!!! userData", userData)
+        // const [hour] = userData.birthTime.split(":").map(Number) // this is the number object 
+        
 
         // Create a date object using the provided year, month, date, and time
         const formatDate = new Date(
             userData.year,
             userData.month - 1, // Months are 0-based in JavaScript (0 = January, 1 = February, etc.)
             userData.date,
-            userData.birthTime,
+            userData.hours,
             0, // Minutes (assuming it's 0, you can change it if needed)
             0, // Seconds (assuming it's 0, you can change it if needed)
             0 // Milliseconds (assuming it's 0, you can change it if needed)
         );
         console.log(formatDate)    
-/////////////////////////////// ADDING TO THE DATABASE //////////////////////////        
+/////////////////////////////// ADDING TO THE DATABASE //////////////////////////   
+///////////////////////////////////////////////////////////////////////////////     
         // This uses mongoose to add the object to the database
         const dbobject = await UserModel.create({  // this makes a model from the schema
             fname: userData.firstName,
@@ -82,7 +88,7 @@ router.post('/addUserChart', async (req, res) => {
 
 // TESTING WITH A PRE-BUILT USER gets a chart, adds to databse sucessful
 router.get('/test', async (req, res) => {
-
+    console.log("test endpoint")
     const userData = {
         "year": 1978,
         "month": 12,
@@ -107,6 +113,7 @@ router.get('/test', async (req, res) => {
         },
         body: JSON.stringify(userData)
     });
+    console.log(response)
     const result = await response.json()
 
     console.log(result)
@@ -147,13 +154,15 @@ router.get('/test', async (req, res) => {
 // })
 
 // gets a single user from the database
-router.get('/user', async (req, res) => {
+router.get('/users/:userid', async (req, res) => {
+    const userid = req.params.userid
     try {
-        const user = await UserModel.find().populate({ path: "chart" }).exec();
 
-        const chart = await ChartModel.findById("64f626120bade3355b1bba7b")
+        const user = await UserModel.findById(userid).populate({ path: "chart" }).exec();
+
+        
         console.log(user)
-        console.log(chart)
+        
 
         // user.forEach(  (item) => {
 

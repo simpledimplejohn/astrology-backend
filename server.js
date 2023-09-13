@@ -20,9 +20,12 @@ db.once('open', () => {
 // this sets where the location of all our files are
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(function(req, res, next) {
+app.all("*", function(req, res, next) { // 
   res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Headers', ['Content-Type'])
+  next();
 });
+
 app.set('view engine', 'ejs')
 app.set('views', __dirname + '/views') 
 app.set('layout', 'layout/layout')
@@ -31,4 +34,6 @@ app.use(express.static('public'))
 
 app.use('/', indexRouter) // tells the app to use the above router tied to the file
 
-app.listen(process.env.PORT || 3000)
+app.listen(process.env.PORT || 3000, () => {
+  console.log("server ready to listen on port ", process.env.PORT || 3000);
+} );

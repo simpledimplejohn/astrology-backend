@@ -12,6 +12,7 @@ This API takes user data from the front end website.  It can get a users chart a
 - root folder `\BACK_END`
 - mongodb 
     - brew services start mongodb-community
+    - brew services restart mongodb-community
 - launch 
     `npm run devStart`
 
