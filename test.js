@@ -39,7 +39,7 @@ const userData = {
 
 
 // this goes to the database 
-const user = {
+const toDataBase = {
     "fname": "Zason",
     "lname": "Zock",
     "dob": "1/1/1876",
@@ -53,7 +53,7 @@ const user = {
     }
 }
 // this comes from the form
-const userFrontEnd = {
+const frontForm = {
     "firstName": "Constible",
     "lastName": "Blockhead",
     "birthdate": "1799-11-12",
@@ -61,22 +61,28 @@ const userFrontEnd = {
     "latitude": 32.1,
     "longitude": -120.1,
     "timezone": 5,
-    "year": 1640,
-    "month": 7,
-    "date": 6,
+    "year": 1978,
+    "month":11,
+    "date": 13,
 };
 
-console.log(userFrontEnd);
+
 
 // Create a date object using the provided year, month, date, and time
-const formatDate = new Date(
-    userFrontEnd.year,
-    userFrontEnd.month - 1, // Months are 0-based in JavaScript (0 = January, 1 = February, etc.)
-    userFrontEnd.date,
-    userFrontEnd.birthTime,
+const utcDate = new Date();
+utcDate.setUTCFullYear(frontForm.year)
+utcDate.setUTCMonth(frontForm.month-1)
+utcDate.setUTCDate(frontForm.date)
+utcDate.setUTCHours(frontForm.birthTime)
+
+const standardDate = new Date(
+    frontForm.year,
+    frontForm.month - 1, // Months are 0-based in JavaScript (0 = January, 1 = February, etc.)
+    frontForm.date,
+    frontForm.birthTime,
     0, // Minutes (assuming it's 0, you can change it if needed)
     0, // Seconds (assuming it's 0, you can change it if needed)
     0 // Milliseconds (assuming it's 0, you can change it if needed)
 );
-
-console.log(formatDate);
+console.log("UTC DATE",utcDate);
+console.log("standard date",standardDate)

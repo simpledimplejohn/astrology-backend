@@ -48,28 +48,23 @@ router.post('/addUserChart', async (req, res) => {
         console.log("FROM THIS!!! userData", userData)  // made it to here
 
         const dateString2 = "1995-12-17T03:24:00"
-        const dateString = `${userData.year}-${userData.month}-${userData.date}T${userData.birthTime}:00:00.000Z`
-        console.log("datestring2",dateString2)
-        // const [hour] = userData.birthTime.split(":").map(Number) // this is the number object 
+        const dateString = `${userData.year}-${userData.month}-${userData.date}T${userData.hours}:00:00.000Z`
+        // console.log("datestring2",dateString2)
+        const utcDate = new Date();
+        utcDate.setUTCFullYear(userData.year)
+        utcDate.setUTCMonth(userData.month-1)
+        utcDate.setUTCDate(userData.date)
+        utcDate.setUTCHours(userData.hours)
         
         // Create a date object using the provided year, month, date, and time
-        const formatDate = new Date(
-            // userData.year,
-            // userData.month - 1, // Months are 0-based in JavaScript (0 = January, 1 = February, etc.)
-            // userData.date,
-            dateString2,
-            // 0, // Minutes (assuming it's 0, you can change it if needed)
-            // 0, // Seconds (assuming it's 0, you can change it if needed)
-            // 0 // Milliseconds (assuming it's 0, you can change it if needed)
-        );
-        console.log("formated date",formatDate)    
-/////////////////////////////// ADDING TO THE DATABASE //////////////////////////   
-///////////////////////////////////////////////////////////////////////////////     
+
+        console.log("utc date",utcDate)    
+
         // This uses mongoose to add the object to the database
         const dbobject = await UserModel.create({  // this makes a model from the schema
             fname: userData.firstName,
             lname: userData.lastName,
-            dob: formatDate,
+            dob: utcDate,
             lat: userData.latitude,
             log: userData.longitude,
             timezone: userData.timezone,
