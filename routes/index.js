@@ -17,7 +17,7 @@ router.post('/addUserChart', async (req, res) => {
             "year": userData.year,
             "month": userData.month,
             "date": userData.date,
-            "hours": userData.birthTime,
+            "hours": userData.hours,
             "minutes": 0,
             "seconds": 0,
             "latitude": userData.latitude,
@@ -47,8 +47,8 @@ router.post('/addUserChart', async (req, res) => {
 
         console.log("FROM THIS!!! userData", userData)  // made it to here
 
-        const dateString = "1995-12-17T03:24:00"
-        const dateString2 = `${userData.year}-${userData.month}-${userData.date}T${userData.birthTime}:00:00`
+        const dateString2 = "1995-12-17T03:24:00"
+        const dateString = `${userData.year}-${userData.month}-${userData.date}T${userData.birthTime}:00:00.000Z`
         console.log("datestring2",dateString2)
         // const [hour] = userData.birthTime.split(":").map(Number) // this is the number object 
         
